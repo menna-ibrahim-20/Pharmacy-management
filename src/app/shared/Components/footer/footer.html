@@ -1,0 +1,65 @@
+<footer class="main-footer">
+  <div class="footer-top">
+    
+    <div class="footer-column brand-column">
+      <div class="logo">
+        <span class="logo-text"><span style="color: #0b593e; font-weight: 800;">Medi</span><span style="color: #ffffff; font-weight: 800;">Store</span></span>
+      </div>
+      <p class="brand-desc">
+        Your trusted online pharmacy. Licensed, regulated, and here for your health.
+      </p>
+      <div class="phone-number">
+        <i class="fas fa-phone"></i> {{ settingsService.getPhone() }}
+      </div>
+    </div>
+
+    <div class="footer-column">
+      <h3>Shop</h3>
+      <ul>
+        <li><a href="#">Anti-Biotics</a></li>
+        <li><a href="#">Tablets & Capsules</a></li>
+        <li><a href="#">Creams & Ointment</a></li>
+        <li><a href="#">Suppsitories</a></li>
+        <li><a href="#">Eye Care</a></li>
+        <li><a href="#">First Aid</a></li>
+        <li><a href="#">Injections</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Help</h3>
+      <ul>
+        <li><a href="#">Track Your Order</a></li>
+        <li><a href="#">Returns & Refunds</a></li>
+        <li><a href="#">Prescription Service</a></li>
+        <li><a href="#">Health Advice</a></li>
+        <li><a routerLink="/contact-me">Contact me</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="#">About {{ settingsService.getStoreName() }}</a></li>
+        <li><a href="#">Pharmacist Team</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <hr class="footer-divider">
+
+  <div class="footer-bottom">
+    <div class="copyright">
+      © 2026 {{ settingsService.getStoreName() }} Pharmacy. All rights reserved.
+    </div>
+    <div class="regulation">
+      <i class="shield-icon fas fa-shield-alt"></i> 
+      Regulated by the Pharmacy Board · GPhC registered
+    </div>
+  </div>
+</footer>
+

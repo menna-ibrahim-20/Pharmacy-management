@@ -1,0 +1,221 @@
+<div class="db-container">
+  <!-- Header -->
+  <div class="db-header">
+    <h1>Dashboard</h1>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <!-- Revenue Card -->
+    <div class="stat-card" routerLink="/admin/orders">
+      <div class="card-head">
+        <div class="icon-wrap green">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+        </div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow-link"></i>
+      </div>
+      <div class="card-val">EGP {{ totalRevenue | number:'1.2-2' }}</div>
+      <div class="card-label">Total Revenue (Jun)</div>
+      <div class="card-trend green-text">+18% vs last month</div>
+    </div>
+
+    <!-- Orders Card -->
+    <div class="stat-card" routerLink="/admin/orders">
+      <div class="card-head">
+        <div class="icon-wrap blue">
+          <i class="fa-solid fa-box-open"></i>
+        </div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow-link"></i>
+      </div>
+      <div class="card-val">{{ orderService.orders().length }}</div>
+      <div class="card-label">Orders Today</div>
+      <div class="card-trend blue-text">{{ pendingOrdersCount }} pending action</div>
+    </div>
+
+    <!-- Products Card -->
+    <div class="stat-card" routerLink="/admin/settings">
+      <div class="card-head">
+        <div class="icon-wrap orange">
+          <i class="fa-solid fa-cubes"></i>
+        </div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow-link"></i>
+      </div>
+      <div class="card-val">{{ totalProductsCount() }}</div>
+      <div class="card-label">Total Products</div>
+      <div class="card-trend orange-text">{{ lowStockProducts().length }} low stock alerts</div>
+    </div>
+
+    <!-- Customers Card -->
+    <div class="stat-card" routerLink="/admin/customers">
+      <div class="card-head">
+        <div class="icon-wrap purple">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <i class="fa-solid fa-arrow-up-right-from-square arrow-link"></i>
+      </div>
+      <div class="card-val">{{ customersCount() | number }}</div>
+      <div class="card-label">Active Customers</div>
+      <div class="card-trend green-text">+23 this week</div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <!-- Revenue Overview Chart Card -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div>
+          <h3>Revenue Overview</h3>
+          <p>Monthly revenue · Jan–Jun 2026</p>
+        </div>
+        <span class="trend-badge">+18.4%</span>
+      </div>
+      <div class="chart-wrapper">
+        <svg viewBox="0 0 500 200" width="100%" height="260">
+          <!-- Grid Lines -->
+          <line x1="30" y1="30" x2="480" y2="30" stroke="#f1f3f5" stroke-dasharray="4"/>
+          <line x1="30" y1="80" x2="480" y2="80" stroke="#f1f3f5" stroke-dasharray="4"/>
+          <line x1="30" y1="130" x2="480" y2="130" stroke="#f1f3f5" stroke-dasharray="4"/>
+          <line x1="30" y1="180" x2="480" y2="180" stroke="#dee2e6"/>
+
+          <!-- Shaded Area Under Curve -->
+          <path class="revenue-area" d="M 30 180 Q 110 140 190 150 T 350 110 T 480 80 L 480 180 Z" fill="rgba(11, 89, 94, 0.04)"/>
+          
+          <!-- Line path -->
+          <path class="revenue-path" d="M 30 180 Q 110 140 190 150 T 350 110 T 480 80" fill="none" stroke="#0b593e" stroke-width="3"/>
+          
+          <!-- Tooltip Marker -->
+          <circle class="marker-dot" cx="480" cy="80" r="5" fill="#0b593e"/>
+          <circle class="marker-pulse" cx="480" cy="80" r="9" fill="rgba(11, 89, 94, 0.2)"/>
+
+          <!-- X Axis Labels -->
+          <text x="30" y="195" font-size="10" fill="#adb5bd" text-anchor="middle">Jan</text>
+          <text x="120" y="195" font-size="10" fill="#adb5bd" text-anchor="middle">Feb</text>
+          <text x="210" y="195" font-size="10" fill="#adb5bd" text-anchor="middle">Mar</text>
+          <text x="300" y="195" font-size="10" fill="#adb5bd" text-anchor="middle">Apr</text>
+          <text x="390" y="195" font-size="10" fill="#adb5bd" text-anchor="middle">May</text>
+          <text x="480" y="195" font-size="10" fill="#adb5bd" text-anchor="middle">Jun</text>
+
+          <!-- Y Axis Labels -->
+          <text x="25" y="183" font-size="10" fill="#adb5bd" text-anchor="end">EGP 0</text>
+          <text x="25" y="133" font-size="10" fill="#adb5bd" text-anchor="end">12k</text>
+          <text x="25" y="83" font-size="10" fill="#adb5bd" text-anchor="end">24k</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Sales by Category Donut Card -->
+    <div class="chart-card donut-card">
+      <div class="chart-header">
+        <div>
+          <h3>Sales by Category</h3>
+          <p>Distribution this month</p>
+        </div>
+      </div>
+      <div class="donut-wrapper">
+        <div class="donut-svg-box">
+          <svg viewBox="0 0 100 100" width="130" height="130">
+            <!-- Background track -->
+            <circle cx="50" cy="50" r="38" fill="transparent" stroke="#f1f3f5" stroke-width="12"/>
+            
+            <!-- Segment 1: Vitamins (34%) -->
+            <circle cx="50" cy="50" r="38" fill="transparent" stroke="#0b593e" stroke-width="12" 
+                    stroke-dasharray="81 238" stroke-dashoffset="0"/>
+            
+            <!-- Segment 2: Pain Relief (28%) -->
+            <circle cx="50" cy="50" r="38" fill="transparent" stroke="#10b981" stroke-width="12" 
+                    stroke-dasharray="67 238" stroke-dashoffset="-81"/>
+            
+            <!-- Segment 3: Cold & Flu (16%) -->
+            <circle cx="50" cy="50" r="38" fill="transparent" stroke="#f59f00" stroke-width="12" 
+                    stroke-dasharray="38 238" stroke-dashoffset="-148"/>
+            
+            <!-- Segment 4: Baby Care (10%) -->
+            <circle cx="50" cy="50" r="38" fill="transparent" stroke="#3b82f6" stroke-width="12" 
+                    stroke-dasharray="24 238" stroke-dashoffset="-186"/>
+            
+            <!-- Segment 5: Eye Care (7%) -->
+            <circle cx="50" cy="50" r="38" fill="transparent" stroke="#845ef7" stroke-width="12" 
+                    stroke-dasharray="17 238" stroke-dashoffset="-210"/>
+          </svg>
+        </div>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="dot green"></span> Tablets & Capsules <span class="pct">34%</span></div>
+          <div class="legend-item"><span class="dot emerald"></span> Anti-Biotics <span class="pct">28%</span></div>
+          <div class="legend-item"><span class="dot orange"></span> Creams & Ointment <span class="pct">16%</span></div>
+          <div class="legend-item"><span class="dot blue"></span> Eye Care <span class="pct">10%</span></div>
+          <div class="legend-item"><span class="dot purple"></span> Injections <span class="pct">7%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Grid -->
+  <div class="bottom-grid">
+    <!-- Recent Orders -->
+    <div class="bottom-card orders-card-body">
+      <div class="card-title-row">
+        <h3>Recent Orders</h3>
+        <a routerLink="/admin/orders" class="view-all-link">View all</a>
+      </div>
+      <div class="table-container">
+        <table class="db-table">
+          <thead>
+            <tr>
+              <th>ORDER</th>
+              <th>CUSTOMER</th>
+              <th>STATUS</th>
+              <th>TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of recentOrders" routerLink="/admin/orders">
+              <td class="order-id-cell"><strong>{{ order.orderId }}</strong></td>
+              <td>
+                <div class="cust-info">
+                  <span class="cust-name">{{ order.customerName }}</span>
+                  <span class="cust-date">{{ order.date }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="status-badge" [class]="order.status.toLowerCase()">
+                  {{ order.status }}
+                </span>
+              </td>
+              <td class="total-cell"><strong>EGP {{ order.total | number:'1.2-2' }}</strong></td>
+            </tr>
+            <tr *ngIf="recentOrders.length === 0">
+              <td colspan="4" class="empty-row">No orders recorded yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Low Stock Alerts -->
+    <div class="bottom-card">
+      <div class="card-title-row">
+        <h3>Low Stock Alerts</h3>
+        <a routerLink="/admin/settings" class="view-all-link">View all</a>
+      </div>
+      <div class="low-stock-list">
+        <div class="low-stock-item" *ngFor="let prod of lowStockProducts().slice(0, 5)">
+          <div class="item-left">
+            <img [src]="prod.image" [alt]="prod.name" class="item-img">
+            <div class="item-details">
+              <h4>{{ prod.name }}</h4>
+              <p>{{ prod.brand || 'MediStore' }}</p>
+            </div>
+          </div>
+          <span class="stock-badge" [class.out]="(prod.stock ?? prod.quantity) === 0">
+            {{ prod.stock ?? prod.quantity }} left
+          </span>
+        </div>
+        <div class="empty-stock" *ngIf="lowStockProducts().length === 0">
+          <i class="fa-regular fa-circle-check"></i>
+          <p>All products have healthy stock levels.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

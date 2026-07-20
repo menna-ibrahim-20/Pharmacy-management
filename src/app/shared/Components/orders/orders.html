@@ -1,0 +1,214 @@
+<div class="orders-dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-main">
+      <h1>Orders</h1>
+      <span class="orders-count">{{ filteredOrders.length }} total orders</span>
+    </div>
+  </div>
+
+  <!-- Filter Status Tabs -->
+  <div class="filter-tabs-wrapper">
+    <div class="tabs-list">
+      <button 
+        [class.active]="activeTab === 'All'" 
+        (click)="setTab('All')"
+        class="tab-btn all-tab">
+        All <span class="tab-badge">{{ getStatusCount('All') }}</span>
+      </button>
+      <button 
+        [class.active]="activeTab === 'Pending'" 
+        (click)="setTab('Pending')"
+        class="tab-btn pending-tab">
+        Pending <span class="tab-badge">{{ getStatusCount('Pending') }}</span>
+      </button>
+      <button 
+        [class.active]="activeTab === 'Processing'" 
+        (click)="setTab('Processing')"
+        class="tab-btn processing-tab">
+        Processing <span class="tab-badge">{{ getStatusCount('Processing') }}</span>
+      </button>
+      <button 
+        [class.active]="activeTab === 'Shipped'" 
+        (click)="setTab('Shipped')"
+        class="tab-btn shipped-tab">
+        Shipped <span class="tab-badge">{{ getStatusCount('Shipped') }}</span>
+      </button>
+      <button 
+        [class.active]="activeTab === 'Delivered'" 
+        (click)="setTab('Delivered')"
+        class="tab-btn delivered-tab">
+        Delivered <span class="tab-badge">{{ getStatusCount('Delivered') }}</span>
+      </button>
+      <button 
+        [class.active]="activeTab === 'Cancelled'" 
+        (click)="setTab('Cancelled')"
+        class="tab-btn cancelled-tab">
+        Cancelled <span class="tab-badge">{{ getStatusCount('Cancelled') }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar-section">
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery"
+        placeholder="Search orders or customers..."
+        class="search-input">
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="table-container">
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>ORDER ID</th>
+          <th>CUSTOMER</th>
+          <th>DATE</th>
+          <th>ITEMS</th>
+          <th>STATUS</th>
+          <th>TOTAL</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders">
+          <td class="order-id-cell">{{ order.orderId }}</td>
+          <td>
+            <div class="customer-info-cell">
+              <span class="customer-name">{{ order.customerName }}</span>
+              <span class="customer-email">{{ order.customerEmail }}</span>
+            </div>
+          </td>
+          <td class="date-cell">{{ order.date }}</td>
+          <td class="items-cell">{{ order.itemsCount }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="order.status.toLowerCase()">
+              {{ order.status }}
+            </span>
+          </td>
+          <td class="total-cell">EGP {{ order.total | number:'1.2-2' }}</td>
+          <td class="actions-cell">
+            <button class="view-btn" (click)="viewOrderDetails(order)" title="View Order Details">
+              <i class="fas fa-eye"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredOrders.length === 0">
+          <td colspan="7" class="empty-state">
+            <i class="fas fa-box-open empty-icon"></i>
+            <p>No orders found matching the filter criteria.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div class="modal-overlay" *ngIf="isDetailModalOpen" (click)="closeDetailModal()">
+    <div class="details-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Order Details: {{ selectedOrder?.orderId }}</h2>
+        <button class="close-modal-btn" (click)="closeDetailModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body" *ngIf="selectedOrder">
+        <!-- Order Stats Section -->
+        <div class="order-overview">
+          <div class="overview-card">
+            <h4>Customer Information</h4>
+            <p><strong>Name:</strong> {{ selectedOrder.customerName }}</p>
+            <p><strong>Email:</strong> {{ selectedOrder.customerEmail }}</p>
+            <p><strong>Phone:</strong> {{ selectedOrder.customerPhone || 'No phone number' }}</p>
+            <p><strong>Address:</strong> {{ selectedOrder.shippingAddress }}</p>
+          </div>
+          <div class="overview-card">
+            <h4>Payment & Shipping</h4>
+            <p><strong>Date:</strong> {{ selectedOrder.date }}</p>
+            <p><strong>Payment Method:</strong> {{ selectedOrder.paymentMethod | uppercase }}</p>
+            <div class="status-edit-box">
+              <strong>Order Status:</strong>
+              <select [value]="selectedOrder.status" (change)="changeStatus(selectedOrder.orderId, $event)" class="status-select">
+                <option value="Pending">Pending</option>
+                <option value="Processing">Processing</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Customer Feedback & Problems Card -->
+          <div class="overview-card rating-feedback-card" *ngIf="selectedOrder.rating" style="grid-column: 1 / -1; border-color: #ffe066; background-color: #fffbeb;">
+            <h4 style="color: #f59f00; border-bottom-color: #ffe066; border-bottom-style: dashed;">Customer Feedback & Problems</h4>
+            <p>
+              <strong>Rating:</strong>
+              <span style="color: #f59f00; margin-left: 5px; display: inline-flex; gap: 3px;">
+                <i class="fas fa-star" *ngFor="let s of [1,2,3,4,5]" [style.color]="s <= selectedOrder.rating ? '#f59f00' : '#e9ecef'"></i>
+              </span>
+            </p>
+            <p *ngIf="selectedOrder.reviewComment" style="margin-bottom: 0;">
+              <strong>Reported Problem / Comment:</strong>
+              <span style="color: #495057; font-style: italic; background-color: #ffffff; padding: 8px 12px; border-radius: 4px; display: inline-block; margin-top: 6px; border: 1px solid #ffe3e3; width: 100%; box-sizing: border-box;">
+                "{{ selectedOrder.reviewComment }}"
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="modal-items-section">
+          <h3>Items Ordered</h3>
+          <div class="modal-items-table-wrapper">
+            <table class="modal-items-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of selectedOrder.items">
+                  <td>
+                    <div class="item-name-wrap">
+                      <img *ngIf="item.image" [src]="item.image" [alt]="item.name" class="item-img">
+                      <span>{{ item.name }}</span>
+                    </div>
+                  </td>
+                  <td>EGP {{ item.price | number:'1.2-2' }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>EGP {{ (item.price * item.quantity) | number:'1.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Order Total Summary -->
+        <div class="modal-total-summary">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>EGP {{ (selectedOrder.total - 20) | number:'1.2-2' }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping Fee:</span>
+            <span>EGP 20.00</span>
+          </div>
+          <hr>
+          <div class="summary-row grand-total">
+            <span>Grand Total:</span>
+            <span>EGP {{ selectedOrder.total | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

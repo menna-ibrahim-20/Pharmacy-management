@@ -1,0 +1,378 @@
+<div class="cart-overlay" [class.open]="cartService.isDrawerOpen()" (click)="closeCart()"></div>
+
+<div class="cart-drawer" [class.open]="cartService.isDrawerOpen()">
+  <!-- Header -->
+  <div class="cart-header">
+    <div class="header-title-box">
+      <h2>{{ activeTab === 'cart' ? 'Your Cart' : 'Track Orders' }}</h2>
+      <span class="items-count" *ngIf="activeTab === 'cart'">{{ cartService.cartCount() }} items</span>
+      <span class="items-count" *ngIf="activeTab === 'orders'">{{ customerOrders.length }} orders</span>
+    </div>
+    <button class="close-btn" (click)="closeCart()" title="Close Cart">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- Tabs Selector -->
+  <div class="cart-tabs-header" style="display: flex; border-bottom: 1px solid #e9ecef;">
+    <button 
+      (click)="activeTab = 'cart'" 
+      [class.active]="activeTab === 'cart'"
+      style="flex: 1; padding: 12px; border: none; background: none; font-size: 14px; font-weight: bold; cursor: pointer; color: #6c757d; border-bottom: 2px solid transparent; transition: all 0.2s;"
+      [style.border-bottom-color]="activeTab === 'cart' ? '#0b593e' : 'transparent'"
+      [style.color]="activeTab === 'cart' ? '#0b593e' : '#6c757d'">
+      <i class="fa-solid fa-cart-shopping" style="margin-right: 4px;"></i> Cart
+    </button>
+    <button 
+      (click)="activeTab = 'orders'" 
+      [class.active]="activeTab === 'orders'"
+      style="flex: 1; padding: 12px; border: none; background: none; font-size: 14px; font-weight: bold; cursor: pointer; color: #6c757d; border-bottom: 2px solid transparent; transition: all 0.2s;"
+      [style.border-bottom-color]="activeTab === 'orders' ? '#0b593e' : 'transparent'"
+      [style.color]="activeTab === 'orders' ? '#0b593e' : '#6c757d'">
+      <i class="fa-solid fa-clock-rotate-left" style="margin-right: 4px;"></i> Track Orders
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="cart-body" style="padding: 15px; overflow-y: auto; flex: 1;">
+    <!-- Cart Items View -->
+    <div *ngIf="activeTab === 'cart'">
+      <div *ngIf="cartService.cartItems().length === 0" class="empty-cart">
+        <i class="fa-solid fa-cart-shopping empty-icon"></i>
+        <p class="empty-title">Your cart is empty</p>
+        <p class="empty-desc">Add products to your cart to see them here.</p>
+      </div>
+
+      <div *ngIf="cartService.cartItems().length > 0" class="cart-items-list">
+        <div *ngFor="let item of cartService.cartItems()" class="cart-item">
+          <div class="item-img-box">
+            <img [src]="item.image" [alt]="item.name">
+          </div>
+          <div class="item-info">
+            <h4 class="item-name">{{ item.name }}</h4>
+            <span class="item-brand">{{ item.brand }}</span>
+            <div class="qty-control">
+              <button class="qty-btn" (click)="updateQuantity(item.id, -1)">−</button>
+              <span class="qty-val">{{ item.quantity }}</span>
+              <button class="qty-btn" (click)="updateQuantity(item.id, 1)">+</button>
+            </div>
+          </div>
+          <div class="item-actions">
+            <span class="item-price">EGP {{ item.price * item.quantity | number:'1.2-2' }}</span>
+            <button class="remove-btn" (click)="removeItem(item.id)" title="Remove item">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders Tracker View -->
+    <div *ngIf="activeTab === 'orders'" class="cart-orders-list" style="display: flex; flex-direction: column; gap: 15px;">
+      <div *ngIf="customerOrders.length === 0" class="empty-cart" style="padding: 40px 20px; text-align: center;">
+        <i class="fa-solid fa-box-open empty-icon" style="font-size: 36px; color: #ccc; margin-bottom: 10px; display: block;"></i>
+        <p class="empty-title" style="font-size: 16px; font-weight: bold; margin-bottom: 5px; color: #212529;">No orders placed yet</p>
+        <p class="empty-desc" style="font-size: 13px; color: #888;">Any orders you place will appear here to track.</p>
+      </div>
+
+      <div *ngFor="let order of customerOrders" class="order-card" style="background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 10px;">
+        <div class="order-card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #dee2e6; padding-bottom: 8px;">
+          <span style="font-weight: bold; color: #495057; font-size: 13px;">{{ order.orderId }}</span>
+          <span style="font-size: 12px; color: #6c757d;">{{ order.date }}</span>
+        </div>
+
+        <div class="order-card-body" style="display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+          <span style="color: #495057;">{{ order.itemsCount }} items · <strong>EGP {{ order.total | number:'1.2-2' }}</strong></span>
+          <span class="status-badge" [ngClass]="order.status.toLowerCase()" style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; text-align: center;">
+            {{ order.status }}
+          </span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="order-card-actions" *ngIf="order.status === 'Pending' || order.status === 'Processing' || order.status === 'Shipped'" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px;">
+          <button 
+            *ngIf="order.status === 'Pending' || order.status === 'Processing'"
+            (click)="cancelOrder(order.orderId)"
+            style="background-color: #fff5f5; border: 1px solid #ffe3e3; color: #e03131; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+            Cancel Order
+          </button>
+          
+          <button 
+            *ngIf="order.status === 'Shipped'"
+            (click)="confirmArrival(order.orderId)"
+            style="background-color: #ebfbee; border: 1px solid #d3f9d8; color: #2b8a3e; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+            Confirm Delivery
+          </button>
+        </div>
+
+        <!-- Rating & Feedback Section (Only for Delivered orders) -->
+        <div class="order-rating-box" *ngIf="order.status === 'Delivered'" style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #dee2e6; display: flex; flex-direction: column; gap: 8px;">
+          <!-- If already reviewed -->
+          <div *ngIf="order.rating" class="already-rated" style="font-size: 13px; color: #495057;">
+            <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 4px;">
+              <span style="font-weight: 600; color: #6c757d;">Your Rating:</span>
+              <span style="color: #f59f00; display: inline-flex; gap: 2px;">
+                <i class="fa-solid fa-star" *ngFor="let s of [1,2,3,4,5]" [style.color]="s <= order.rating ? '#f59f00' : '#e9ecef'"></i>
+              </span>
+            </div>
+            <p *ngIf="order.reviewComment" style="margin: 0; font-size: 12px; color: #6b7280; font-style: italic; background-color: #f1f3f5; padding: 6px 10px; border-radius: 4px;">
+              "{{ order.reviewComment }}"
+            </p>
+          </div>
+
+          <!-- If not yet reviewed, show form -->
+          <div *ngIf="!order.rating" class="rate-form" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; font-weight: bold; color: #495057;">Rate your order:</span>
+              <!-- Star selection -->
+              <div class="stars-select" style="display: flex; gap: 4px;">
+                <button 
+                  *ngFor="let star of [1,2,3,4,5]"
+                  (click)="selectStar(order.orderId, star)"
+                  style="border: none; background: none; padding: 0; cursor: pointer; font-size: 16px;"
+                  [title]="'Rate ' + star + ' stars'">
+                  <i class="fa-solid fa-star" [style.color]="star <= (orderRatings[order.orderId] || 5) ? '#f59f00' : '#e9ecef'"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Problem / Comment area -->
+            <textarea 
+              [(ngModel)]="orderComments[order.orderId]"
+              placeholder="Report any problems or leave your feedback here..."
+              rows="2"
+              style="width: 100%; border: 1px solid #ced4da; border-radius: 6px; padding: 8px; font-size: 12px; outline: none; resize: none; font-family: inherit; transition: border-color 0.2s; box-sizing: border-box;">
+            </textarea>
+
+            <button 
+              (click)="submitOrderReview(order.orderId)"
+              style="align-self: flex-end; background-color: #0b593e; border: none; color: #ffffff; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: background-color 0.2s;">
+              Submit Feedback
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="cart-footer" *ngIf="activeTab === 'cart' && cartService.cartItems().length > 0">
+    <div class="subtotal-row">
+      <span class="label">Subtotal</span>
+      <span class="value">EGP {{ cartService.cartSubtotal() | number:'1.2-2' }}</span>
+    </div>
+
+    <!-- Free Delivery Info -->
+    <div class="delivery-info" [class.free]="cartService.isFreeDeliveryApplied()">
+      <span class="delivery-icon">
+        <i class="fa-solid fa-truck"></i>
+      </span>
+      <span class="delivery-text" *ngIf="cartService.isFreeDeliveryApplied()">
+        Free delivery applied
+      </span>
+      <span class="delivery-text" *ngIf="!cartService.isFreeDeliveryApplied()">
+        Add EGP {{ settingsService.getDeliveryThreshold() - cartService.cartSubtotal() | number:'1.2-2' }} more for free delivery
+      </span>
+    </div>
+
+    <!-- Checkout Button -->
+    <button class="checkout-btn" (click)="openCheckout()">
+      Checkout — EGP {{ cartService.cartSubtotal() | number:'1.2-2' }}
+    </button>
+  </div>
+</div>
+
+<!-- Checkout Modal Overlay -->
+<div class="checkout-overlay" [class.open]="cartService.isCheckoutOpen()">
+  <div class="checkout-modal" [class.open]="cartService.isCheckoutOpen()">
+    
+    <!-- Header -->
+    <div class="checkout-header">
+      <h3>Secure Checkout</h3>
+      <button class="close-btn" (click)="closeCheckout()" [disabled]="isProcessingPayment">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="checkout-body">
+      
+      <!-- Processing State -->
+      <div *ngIf="isProcessingPayment" class="checkout-status-panel">
+        <div class="payment-spinner"></div>
+        <h4>Processing Secure Payment...</h4>
+        <p>Please do not refresh or close this window.</p>
+      </div>
+
+      <!-- Success State -->
+      <div *ngIf="isOrderCompleted" class="checkout-success-panel">
+        <div class="success-icon-wrap">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3>Order Placed Successfully!</h3>
+        <p class="success-message">Thank you for your order. We have sent a confirmation email with details to your registered address.</p>
+        
+        <div class="order-ref-box">
+          <span class="ref-label">Order Reference ID:</span>
+          <span class="ref-val">{{ generatedOrderId }}</span>
+        </div>
+
+        <div class="success-delivery-notice">
+          <i class="fa-solid fa-truck-fast"></i>
+          <span>Expected Delivery: <strong>Tomorrow</strong></span>
+        </div>
+
+        <button class="dismiss-btn" (click)="closeCheckout()">Back to Store</button>
+      </div>
+
+      <!-- Form Mode -->
+      <div *ngIf="!isProcessingPayment && !isOrderCompleted" class="checkout-form-grid">
+        
+        <!-- Step 1: Shipping Details -->
+        <div class="checkout-section">
+          <div class="section-title">
+            <span class="step-num">1</span>
+            <h4>Shipping Information</h4>
+          </div>
+          
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" [(ngModel)]="shippingName" placeholder="Enter your full name" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group half">
+              <label>Phone Number *</label>
+              <input type="tel" [(ngModel)]="shippingPhone" placeholder="e.g. 01012345678" required>
+            </div>
+            <div class="form-group half">
+              <label>Area / City *</label>
+              <select [(ngModel)]="shippingCity">
+                <option value="Fifth Settlement">Fifth Settlement (التجمع الخامس)</option>
+                <option value="First Settlement">First Settlement (التجمع الأول)</option>
+                <option value="Third Settlement">Third Settlement (التجمع الثالث)</option>
+                <option value="Al Rehab">Al Rehab City (مدينة الرحاب)</option>
+                <option value="Madinaty">Madinaty (مدينتي)</option>
+                <option value="El Shorouk">El Shorouk City (الشروق)</option>
+                <option value="Nasr City">Nasr City (مدينة نصر)</option>
+                <option value="Heliopolis">Heliopolis (مصر الجديدة)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Street Address *</label>
+            <textarea [(ngModel)]="shippingAddress" rows="2" placeholder="Building no., Street name, Floor..." required></textarea>
+          </div>
+        </div>
+
+        <!-- Step 2: Payment Options -->
+        <div class="checkout-section">
+          <div class="section-title">
+            <span class="step-num">2</span>
+            <h4>Select Payment Method</h4>
+          </div>
+
+          <div class="payment-method-selector">
+            <!-- COD -->
+            <div class="pay-method-card" [class.selected]="selectedPaymentMethod === 'cod'" (click)="selectPaymentMethod('cod')">
+              <div class="method-header">
+                <i class="fa-solid fa-money-bill-wave icon"></i>
+                <span class="title">Cash on Delivery</span>
+              </div>
+              <p class="desc">Pay with cash upon package receipt.</p>
+            </div>
+
+            <!-- Card -->
+            <div class="pay-method-card" [class.selected]="selectedPaymentMethod === 'card'" (click)="selectPaymentMethod('card')">
+              <div class="method-header">
+                <i class="fa-solid fa-credit-card icon"></i>
+                <span class="title">Credit / Debit Card</span>
+              </div>
+              <p class="desc">Visa, Mastercard, or Maestro.</p>
+            </div>
+
+            <!-- Wallet -->
+            <div class="pay-method-card" [class.selected]="selectedPaymentMethod === 'instapay'" (click)="selectPaymentMethod('instapay')">
+              <div class="method-header">
+                <i class="fa-solid fa-mobile-screen icon"></i>
+                <span class="title">Instapay / Mobile Wallet</span>
+              </div>
+              <p class="desc">Vodafone Cash, Instapay handle.</p>
+            </div>
+          </div>
+
+          <!-- Payment Forms Details -->
+          <div class="payment-details-form-box">
+            
+            <!-- COD Details -->
+            <div *ngIf="selectedPaymentMethod === 'cod'" class="payment-details-info">
+              <i class="fa-solid fa-hand-holding-dollar"></i>
+              <p>An extra EGP 10 cash-handling fee might apply. Please make sure you have the exact amount ready upon delivery.</p>
+            </div>
+
+            <!-- Card Form -->
+            <div *ngIf="selectedPaymentMethod === 'card'" class="card-payment-form">
+              <div class="form-group">
+                <label>Cardholder Name</label>
+                <input type="text" [(ngModel)]="cardHolder" placeholder="Name as printed on card">
+              </div>
+              <div class="form-group">
+                <label>Card Number</label>
+                <input type="text" [(ngModel)]="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+              </div>
+              <div class="form-row">
+                <div class="form-group half">
+                  <label>Expiry Date</label>
+                  <input type="text" [(ngModel)]="cardExpiry" placeholder="MM/YY" maxlength="5">
+                </div>
+                <div class="form-group half">
+                  <label>CVV / CVC</label>
+                  <input type="password" [(ngModel)]="cardCvv" placeholder="123" maxlength="3">
+                </div>
+              </div>
+            </div>
+
+            <!-- Instapay Form -->
+            <div *ngIf="selectedPaymentMethod === 'instapay'" class="wallet-payment-form">
+              <div class="form-group">
+                <label>Mobile Wallet Number / Instapay Address</label>
+                <input type="text" [(ngModel)]="mobileNumber" placeholder="e.g. 01012345678 or handle@instapay">
+              </div>
+              <div class="payment-details-info">
+                <i class="fa-solid fa-circle-info"></i>
+                <p>A secure verification prompt will be sent to your mobile wallet app to approve the transaction.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer Summary -->
+    <div class="checkout-footer" *ngIf="!isProcessingPayment && !isOrderCompleted">
+      <div class="summary-details">
+        <div class="summary-line">
+          <span>Items Subtotal:</span>
+          <span>EGP {{ cartService.cartSubtotal() | number:'1.2-2' }}</span>
+        </div>
+        <div class="summary-line">
+          <span>Shipping Fee:</span>
+          <span *ngIf="cartService.isFreeDeliveryApplied()">Free</span>
+          <span *ngIf="!cartService.isFreeDeliveryApplied()">EGP 35.00</span>
+        </div>
+        <div class="summary-line total">
+          <span>Grand Total:</span>
+          <span>EGP {{ (cartService.cartSubtotal() + (cartService.isFreeDeliveryApplied() ? 0 : 35)) | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <button class="confirm-order-btn" (click)="submitPayment()">
+        <i class="fa-solid fa-shield-halved"></i> Confirm Payment & Place Order
+      </button>
+    </div>
+
+  </div>
+</div>

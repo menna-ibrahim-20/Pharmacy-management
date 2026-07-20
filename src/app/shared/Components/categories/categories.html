@@ -1,0 +1,12 @@
+<nav class="categories-nav">  
+  <div class="nav-links">
+    <a *ngFor="let item of categories" 
+       href="#" 
+       class="nav-item"
+       [class.active]="activeItem === item.name"
+       (click)="setActive(item.name, $event)">
+       
+      <i [class]="item.icon"></i> {{ item.name }}
+    </a>
+  </div>
+</nav>

@@ -1,0 +1,84 @@
+<header class="navbar">
+    <div class="breadcramb">
+        <button class="menu-toggle-btn" (click)="toggleSidebar()" title="Toggle Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <span class="brand-name"><span style="color: #0b593e; font-weight: 800;">{{ storeNameFirst }}</span><span style="color: #1f2937; font-weight: 800;">{{ storeNameSecond }}</span></span>
+        <span class="separator">&gt;</span>
+        <span class="page-name"> Admin</span>
+    </div>
+    <div class="nav-actions">
+        <div class="notification-wrapper" (click)="toggleNotificationBox()" style="position: relative; cursor: pointer;">
+            <i class="fa-regular fa-bell" style="font-size: 20px; color: #555;"></i>
+            <span class="bell-badge" *ngIf="totalNotificationCount > 0">{{ totalNotificationCount }}</span>
+            <div class="notification-box" *ngIf="showNotificationBox" (click)="$event.stopPropagation()">
+                <div class="box-header">
+                    <h6>Notifications</h6>
+                    <button class="close-btn" (click)="toggleNotificationBox()">×</button>
+                </div>
+                <div class="box-body" style="max-height: 250px; overflow-y: auto;">
+                    <!-- Order Notifications (Pending / Cancelled) -->
+                    <div *ngIf="orderNotifications.length > 0">
+                        <div *ngFor="let order of orderNotifications" class="notification-item order-alert" style="border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; margin-bottom: 10px; text-align: left; position: relative;">
+                            <button 
+                                (click)="dismissNotification(order.orderId, $event)" 
+                                style="position: absolute; right: 0; top: 0; background: none; border: none; font-size: 13px; color: #9ca3af; cursor: pointer; padding: 2px 5px;"
+                                title="Dismiss notification">
+                                ×
+                            </button>
+                            
+                            <!-- Pending state -->
+                            <div *ngIf="order.status === 'Pending'">
+                                <p class="alert-text" style="color: #0b593e; font-weight: 700; margin: 0; font-size: 13px; padding-right: 15px;">
+                                    📦 New Order received!
+                                </p>
+                                <p style="margin: 4px 0 0 0; font-size: 11px; color: #495057; line-height: 1.4;">
+                                    ID: <strong>{{ order.orderId }}</strong> by {{ order.customerName }}<br>
+                                    Total: <strong>EGP {{ order.total | number:'1.2-2' }}</strong>
+                                </p>
+                            </div>
+
+                            <!-- Cancelled state -->
+                            <div *ngIf="order.status === 'Cancelled'">
+                                <p class="alert-text" style="color: #ef4444; font-weight: 700; margin: 0; font-size: 13px; padding-right: 15px;">
+                                    ❌ Order Cancelled!
+                                </p>
+                                <p style="margin: 4px 0 0 0; font-size: 11px; color: #495057; line-height: 1.4;">
+                                    ID: <strong>{{ order.orderId }}</strong> by {{ order.customerName }}<br>
+                                    Total: <strong>EGP {{ order.total | number:'1.2-2' }}</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts -->
+                    <div *ngIf="lowStockCount > 0" style="text-align: left; border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; margin-bottom: 10px;">
+                        <p class="alert-text" style="margin: 0; font-size: 13px; font-weight: 700; color: #d97706;">
+                            ⚠️ Low Stock Warning!
+                        </p>
+                        <p style="margin: 4px 0 0 0; font-size: 11px; color: #495057; line-height: 1.4;">
+                            There are <strong>{{ lowStockCount }}</strong> products running low on stock!<br>
+                            Products: <span style="color: #d97706; font-weight: 600;">{{ alertProductNames }}</span>
+                        </p>
+                    </div>
+
+                    <!-- Out of Stock Alerts -->
+                    <div *ngIf="outOfStockCount > 0" style="text-align: left; border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; margin-bottom: 10px;">
+                        <p class="alert-text" style="margin: 0; font-size: 13px; font-weight: 700; color: #ef4444;">
+                            🚨 Out of Stock Alert!
+                        </p>
+                        <p style="margin: 4px 0 0 0; font-size: 11px; color: #495057; line-height: 1.4;">
+                            There are <strong>{{ outOfStockCount }}</strong> products completely out of stock!<br>
+                            Products: <span style="color: #ef4444; font-weight: 600;">{{ outOfStockProductNames }}</span>
+                        </p>
+                    </div>
+
+                    <p *ngIf="totalNotificationCount === 0" class="empty-msg">All caught up! No new notifications.</p>
+                </div>
+            </div>
+        </div>
+        <div class="profile-wrapper">
+            <div class="profile-circle">{{ adminInitials }}</div>
+        </div>
+    </div>
+</header>

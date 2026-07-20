@@ -1,0 +1,82 @@
+<app-navbar></app-navbar>
+<app-cart></app-cart>
+
+<div class="contact-page-container">
+  <div class="contact-card-wrapper">
+    
+    <div class="contact-info-sidebar">
+      <div class="sidebar-header">
+        <h2>Get in Touch</h2>
+        <p>Have a question or need medical guidance? Our team is here to help you.</p>
+      </div>
+
+      <div class="info-links-list">
+        <div class="info-item">
+          <div class="icon-box"><i class="fa-solid fa-phone"></i></div>
+          <div class="info-details">
+            <span>Call Us 24/7</span>
+            <p>{{ settingsService.getPhone() }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="icon-box"><i class="fa-solid fa-envelope"></i></div>
+          <div class="info-details">
+            <span>Email Support</span>
+            <p>{{ settingsService.getEmail() }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="icon-box"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="info-details">
+            <span>Main Pharmacy</span>
+            <p>123 Health Science Blvd, Suite 400</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="icon-box"><i class="fa-solid fa-clock"></i></div>
+          <div class="info-details">
+            <span>Working Hours</span>
+            <p>Mon-Sat: 8am - 9pm / Sun: 9am - 6pm</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form-area">
+      <h2>Send Us a Message</h2>
+      
+      <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+        <div class="form-row">
+          <div class="input-group">
+            <label>Full Name</label>
+            <input type="text" [(ngModel)]="formData.name" name="name" placeholder="John Doe" required>
+          </div>
+          <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" [(ngModel)]="formData.email" name="email" placeholder="john&#64;example.com" required>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Subject</label>
+          <input type="text" [(ngModel)]="formData.subject" name="subject" placeholder="Prescription Inquiry, Order Status..." required>
+        </div>
+
+        <div class="input-group">
+          <label>Message</label>
+          <textarea [(ngModel)]="formData.message" name="message" rows="5" placeholder="Write your message here..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-contact-btn" [disabled]="!contactForm.form.valid">
+          <i class="fa-solid fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<app-footer></app-footer>

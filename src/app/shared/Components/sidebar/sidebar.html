@@ -1,0 +1,36 @@
+<div class="sidebar-overlay" *ngIf="isOpen" (click)="onClose()"></div>
+<nav class="sidebar" [class.mobile-open]="isOpen">
+    <div class="sidebar-header">
+        <h2><span style="color: #0b593e; font-weight: 800;">{{ storeNameFirst }}</span><span style="color: #ffffff; font-weight: 800;">{{ storeNameSecond }}</span></h2>
+        <button class="sidebar-close-btn" (click)="onClose()" title="Close Menu">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h6>ADMIN PANEL</h6>
+    </div>
+
+    <h5 class="sub-title">Main</h5>
+    <ul class="nav-links">
+        <li><a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a></li>
+        <li><a routerLink="/admin/products" routerLinkActive="active">Products</a></li>
+        <li><a routerLink="/admin/orders" routerLinkActive="active">Orders</a></li>
+        <li><a routerLink="/admin/customers" routerLinkActive="active">Customers</a></li>
+        <li><a routerLink="/admin/settings" routerLinkActive="active">Settings</a></li>
+    </ul>
+
+    <h5 class="sub-title">Store</h5>
+    <ul class="nav-links">
+        <li><a routerLink="/home">View Store</a></li>
+        <li><a routerLink="/location">Store Map</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+        <div class="admin-info" style="display: flex; flex-direction: column; align-items: flex-start;">
+            <span class="admin-name" style="font-weight: bold; font-size: 0.9rem; color: #fff;">{{ adminName }}</span> 
+            <span class="admin-email" style="font-size: 0.75rem; color: #9ca3af; margin-top: 2px; word-break: break-all;">{{ adminEmail }}</span> 
+        </div>
+        
+        <button class="logout-btn" (click)="logout()" title="log out">
+           <a href="#"><i class="fas fa-sign-out-alt"></i> </a> 
+        </button>
+    </div>
+</nav>

@@ -1,0 +1,255 @@
+.top-bar {
+  background-color: #0b593e;
+  color: #c2ded4;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 5%;
+  font-size: 13px;
+}
+.top-bar-left span, .top-bar-right span {
+  margin-right: 15px;
+}
+.top-bar i {
+  margin-right: 5px;
+}
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 15px 5%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ededed;
+  gap: 30px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  font-weight: bold;
+  color: black;
+}
+span.text{
+  color: #0b6848;
+}
+
+.logo-text small {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #777;
+  margin-top: -10px;
+}
+
+.search-bar-container {
+  position: relative;
+  width: 25%; 
+  margin-right: auto; 
+  margin-left: 20px;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 40px 10px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #f5f6f7;
+  outline: none;
+  font-size: 14px;
+}
+.search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  cursor: pointer;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.action-btn {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+ 
+}
+.action-btn:hover {
+  color: #0b6848;
+}
+.notification-btn ,.admin-btn, .logout-btn{
+  border: none;
+  font-size: 15px;
+  color: white;
+  cursor: pointer;
+  background-color: #0b6848;
+  border-radius: 25px;
+  transition: transform 0.2s;
+  width: 40px;
+  height: 40px;
+  
+}
+.cart-btn {
+  border: none;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  background-color: #0b6848;
+  border-radius: 25px;
+  transition: transform 0.2s;
+  width: 40px;
+  height: 40px;
+  padding-right: 2px;
+  
+}
+.cart-btn:hover ,.notification-btn:hover ,.admin-btn:hover , .logout-btn:hover{
+  background-color: #084f36;
+  transform: translateY(-3px);
+}
+
+
+.logout-btn{
+    background-color: #0b6848;
+}
+
+.logo-and-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hamburger-menu {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #0b593e;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.hamburger-menu:hover {
+  background-color: #f3f4f6;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.actions-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e5e7eb;
+}
+
+.interactive-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 992px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+  }
+  .top-bar-left, .top-bar-right {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .top-bar-left span, .top-bar-right span {
+    margin-right: 0;
+  }
+  
+  .main-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 15px 20px;
+  }
+
+  .logo-and-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+
+  .nav-content {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #f3f4f6;
+  }
+
+  .nav-content.open {
+    display: flex;
+  }
+
+  .search-bar-container {
+    width: 100%;
+    margin: 0;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .action-btn {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    border: 1px solid #f3f4f6;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  .action-btn:hover {
+    background-color: #ebfbf5;
+    border-color: #c2ded4;
+    color: #0b593e;
+  }
+
+  .actions-divider {
+    display: none;
+  }
+
+  .interactive-actions {
+    justify-content: center;
+    width: 100%;
+    gap: 16px;
+    padding-top: 10px;
+  }
+}
+
+

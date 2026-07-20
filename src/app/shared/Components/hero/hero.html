@@ -1,0 +1,25 @@
+<section class="hero-banner">
+  <div class="hero-content">
+    <span class="hero-subtitle">YOUR HEALTH, OUR PRIORITY</span>
+    <h1 class="hero-title">Trusted Pharmacy, <br> Delivered to You</h1>
+    <p class="hero-description">
+      Over 2,000 prescription and over-the-counter products from brands your pharmacist recommends.
+    </p>
+    <div class="hero-buttons">
+      <button class="btn-white" (click)="scrollToProducts()">Shop Vitamins</button>
+      <button class="btn-outline" routerLink="/location"><i class="fas fa-map-marker-alt"></i> Find a Store</button>
+    </div>
+  </div>
+
+  <div class="features-grid">
+    <div *ngFor="let feat of features" class="feature-card">
+      <div class="feature-icon">
+        <i [class]="feat.icon"></i>
+      </div>
+      <div class="feature-text">
+        <h3>{{ feat.title }}</h3>
+        <p>{{ feat.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>

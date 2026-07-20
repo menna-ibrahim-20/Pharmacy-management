@@ -1,0 +1,288 @@
+.auth-page {
+
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 120px 20px 40px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  font-family: 'Cairo', sans-serif;
+
+  background:
+    linear-gradient(
+rgba(11,89,62,.65),
+rgba(11,104,72,.65)
+),
+        url('../../../../../src/assets/images/WhatsApp\ Image\ 2026-07-04\ at\ 2.28.39\ PM.jpeg');
+  background-size: cover;
+
+  background-position: center;
+
+  background-repeat: no-repeat;
+
+}
+
+
+
+.auth-logo{
+
+  position:absolute;
+
+  top:25px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+}
+
+.logo-text{
+
+  color:white;
+
+  font-size:34px;
+
+  font-weight:700;
+
+  text-align:center;
+
+}
+
+.logo-text .text{
+
+  color:#d8ffd5;
+
+}
+
+.logo-text small{
+
+  display:block;
+
+  font-size:13px;
+
+  letter-spacing:5px;
+
+  margin-top:3px;
+
+}
+
+
+
+.back-btn{
+
+  position:absolute;
+
+  top:25px;
+
+  left:25px;
+
+  width:48px;
+
+  height:48px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.18);
+
+  color:white;
+
+  font-size:22px;
+
+  cursor:pointer;
+
+  backdrop-filter:blur(10px);
+
+  transition:.3s;
+
+}
+
+.back-btn:hover{
+
+  background:white;
+
+  color:#0b6848;
+
+  transform:scale(1.05);
+
+}
+
+
+.auth-card{
+
+    width:100%;
+    max-width:430px;
+
+    padding:40px 35px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.45);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.3);
+
+    box-shadow:0 15px 40px rgba(0,0,0,.2);
+
+}
+
+.auth-title{
+
+  text-align:center;
+
+  color:#0b6848;
+
+  font-size:30px;
+
+  font-weight:bold;
+
+  margin-bottom:8px;
+
+}
+
+.auth-subtitle{
+
+  text-align:center;
+
+  color:#555;
+
+  margin-bottom:28px;
+
+}
+
+
+
+.form-group{
+
+  margin-bottom:18px;
+
+}
+
+.form-group label{
+
+  display:block;
+
+  margin-bottom:6px;
+
+  font-weight:600;
+
+  color:#333;
+
+}
+
+.form-control{
+
+  width:100%;
+
+  padding:13px 15px;
+
+  border-radius:10px;
+
+  border:1px solid rgba(0,0,0,.08);
+
+  background:rgba(255,255,255,.65);
+
+  outline:none;
+
+  transition:.3s;
+
+}
+
+.form-control:focus{
+
+  border-color:#0b6848;
+
+  background:rgba(255,255,255,.95);
+
+  box-shadow:0 0 0 .18rem rgba(11,104,72,.15);
+
+}
+
+.error-msg{
+
+  color:#d92d20;
+
+  font-size:12px;
+
+  margin-top:5px;
+
+}
+
+.error-msg p{
+
+  margin:2px 0;
+
+}
+
+
+
+.auth-btn{
+
+  width:100%;
+
+  padding:14px;
+
+  border:none;
+
+  border-radius:10px;
+
+  background:#0b6848;
+
+  color:white;
+
+  font-size:16px;
+
+  font-weight:600;
+
+  margin-top:10px;
+
+  cursor:pointer;
+
+  transition:.3s;
+
+}
+
+.auth-btn:hover{
+
+  background:#084f38;
+
+}
+
+
+
+.auth-footer-text{
+
+  text-align:center;
+
+  margin-top:20px;
+
+  color:#555;
+
+}
+
+.auth-footer-text a{
+
+  color:#0b6848;
+
+  font-weight:bold;
+
+  text-decoration:none;
+
+}
+
+.auth-footer-text a:hover{
+
+  text-decoration:underline;
+
+}

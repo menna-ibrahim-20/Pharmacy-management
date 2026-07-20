@@ -1,0 +1,85 @@
+<div class="top-bar">
+  <div class="top-bar-left">
+    <span><i class="fas fa-phone"></i> {{ settingsService.getPhone() }}</span>
+    <span routerLink="/location" style="cursor: pointer;"><i class="fas fa-map-marker-alt"></i> Find a store</span>
+  </div>
+
+  <div class="top-bar-right">
+    <span><i class="fas fa-clock"></i> Mon-Sat 8am-9pm · Sun 9am-6pm</span>
+  </div>
+</div>
+
+
+<header class="main-header">
+
+  <div class="logo-and-toggle">
+    <div class="logo">
+      <div class="logo-text">
+        <a routerLink="/home" style="text-decoration: none;">
+          <span style="color: #0b593e; font-weight: 800;">{{ storeNameFirst }}</span><span style="color: #1f2937; font-weight: 800;">{{ storeNameSecond }}</span>
+        </a>
+        <small>PHARMACY</small>
+      </div>
+    </div>
+    <button class="hamburger-menu" (click)="toggleMenu()" title="Toggle Menu">
+      <i class="fa-solid" [class.fa-bars]="!isMenuOpen" [class.fa-xmark]="isMenuOpen"></i>
+    </button>
+  </div>
+
+  <div class="nav-content" [class.open]="isMenuOpen">
+    <div class="search-bar-container">
+      <input
+        type="text"
+        placeholder="Search medicines, vitamins, brands..."
+        class="search-input"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+      >
+      <i class="fas fa-search search-icon" (click)="onSearch()"></i>
+    </div>
+
+    <div class="header-actions">
+      <button class="action-btn" routerLink="/home" (click)="isMenuOpen = false">Home</button>
+
+      @if (isLoggesIn && isAdmin) {
+        <button class="action-btn" routerLink="/admin/dashboard" (click)="isMenuOpen = false">Dashboard</button>
+      }
+
+      <button class="action-btn" routerLink="/location" (click)="isMenuOpen = false">
+        Location
+      </button>
+
+      <button class="action-btn" routerLink="/about-us" (click)="isMenuOpen = false">
+        About Us
+      </button>
+
+      <button class="action-btn" routerLink="/contact-me" (click)="isMenuOpen = false">
+        Contact Me
+      </button>
+
+      <div class="actions-divider"></div>
+
+      <div class="interactive-actions">
+        @if (isLoggesIn) {
+          @if (!isAdmin) {
+            <button (click)="toggleCart(); isMenuOpen = false" class="cart-btn" style="position: relative;">
+              <i class="fas fa-shopping-cart"></i>
+              <span *ngIf="cartService.cartCount() > 0" style="position: absolute; top: -5px; right: -5px; background-color: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; font-weight: bold; min-width: 18px; text-align: center;">
+                {{ cartService.cartCount() }}
+              </span>
+            </button>
+          }
+
+          <button class="logout-btn" (click)="logout(); isMenuOpen = false">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        } @else {
+          <button class="admin-btn" routerLink="/auth/login" (click)="isMenuOpen = false">
+            <i class="fa-solid fa-user"></i>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+</header>

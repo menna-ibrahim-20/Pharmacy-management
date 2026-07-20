@@ -1,0 +1,144 @@
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+}
+.breadcrumb{
+    font-size: 14px;
+    color: #777;
+}
+.brand-name{
+    color: #333;
+    font-weight: bold;
+}
+.nav-actions{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.profile-circle{
+    width: 35px;
+    height: 35px;
+    background-color: #00796b;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+.notification-box {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    direction: rtl; 
+}
+
+.box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #f9f9f9;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.box-header h6 {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #999;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.box-body {
+    padding: 15px;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.products-list {
+    color: #ff4d4d;
+    font-weight: 500;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #777;
+    margin: 0;
+}
+
+.bell-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4d4d;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 6px;
+    min-width: 14px;
+    text-align: center;
+}
+
+@media (max-width: 576px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+  .breadcrumb {
+    font-size: 12px;
+  }
+}
+
+.breadcramb {
+    display: flex;
+    align-items: center;
+}
+
+.menu-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #333;
+    cursor: pointer;
+    margin-right: 12px;
+    padding: 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.menu-toggle-btn:hover {
+    background: #f3f4f6;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle-btn {
+        display: inline-flex;
+    }
+}
+

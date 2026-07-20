@@ -1,0 +1,73 @@
+<div class="products-section">
+  <div class="category-title-container">
+    <h2 class="category-display-title">{{ currentCategory }}</h2>
+    <span class="count-text">{{ filteredProducts().length }} products found</span>
+  </div>
+
+  <div class="products-header">
+    <div class="header-left">
+      </div>
+    <div class="header-right">
+      <div class="sort-dropdown">
+        <span>Sort by</span>
+        <select>
+          <option>Featured</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Avg. Review</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="products-grid">
+    <div *ngFor="let prod of filteredProducts()" class="product-card" [class.out-of-stock]="!prod.inStock">
+      
+      <div class="image-wrapper" [routerLink]="['/product-details', prod.id]" style="cursor: pointer;">
+        <img [src]="prod.image" [alt]="prod.name" class="product-img">
+        
+        <span *ngIf="prod.badge" class="badge" [ngClass]="prod.badgeType">
+          {{ prod.badge }}
+        </span>
+
+        <span *ngIf="prod.oldPrice" class="discount-badge">
+          -{{ getDiscount(prod.price, prod.oldPrice) }}%
+        </span>
+
+        <div *ngIf="!prod.inStock" class="out-of-stock-overlay">
+          Out of Stock
+        </div>
+      </div>
+
+      <div class="product-info">
+        <span class="product-brand">{{ prod.brand }}</span>
+        <h3 class="product-title" [routerLink]="['/product-details', prod.id]" style="cursor: pointer;">{{ prod.name }}</h3>
+        <p class="product-desc">{{ prod.description }}</p>
+
+        <div class="rating-container">
+          <div class="stars">
+            <i class="fas fa-star text-amber"></i>
+            <span class="rating-value">{{ prod.rating }}</span>
+            <span class="reviews-count">({{ prod.reviewsCount }})</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="price-box">
+            <span class="current-price">EGP {{ prod.price }}</span>
+            <span *ngIf="prod.oldPrice" class="old-price">EGP {{ prod.oldPrice }}</span>
+          </div>
+          
+          <button 
+            class="add-to-cart-btn" 
+            [disabled]="!prod.inStock"
+            (click)="addToCart(prod)">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

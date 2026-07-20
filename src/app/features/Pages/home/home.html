@@ -1,0 +1,16 @@
+<router-outlet></router-outlet>
+<app-navbar></app-navbar>
+<app-cart></app-cart>
+<app-categories (onCategorySelect)="filterCategory($event); cardRef.filterByCategory($event)"></app-categories>
+
+<main class="home-layout">
+  <app-hero *ngIf="selectedCategory === 'All Product'"></app-hero>
+  
+  <div class="container my-4" id="products-section">
+    <app-product-card #cardRef [currentCategory]="selectedCategory"></app-product-card>
+  </div>
+</main>
+
+<app-why-choose *ngIf="selectedCategory === 'All Product'"></app-why-choose>
+
+<app-footer></app-footer>

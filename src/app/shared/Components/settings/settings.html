@@ -1,0 +1,87 @@
+<div class="settings-container">
+    <h2>Settings</h2>
+    <p>Mange your store configration</p>
+    <div class="card">
+         <div class="card-header">
+            <div class="icon-circle">
+                <i class="fas fa-store"></i>
+            </div>
+            <h3>Store Information</h3>
+        </div>
+        <label><small>STORE NAME</small></label>
+        <input type="text" [(ngModel)]="settings.storeName" placeholder="Store Name">
+        <label><small>CONTACT EMAIL</small></label>
+        <input type="email" [(ngModel)]="settings.email" placeholder="Email">
+        <label><small>PHONE NUMBER</small></label>
+        <input type="text" [(ngModel)]="settings.phone" placeholder="Phone">
+    </div>
+
+    <div class="card">
+         <div class="card-header">
+            <div class="icon-circle">
+                <i class="fas fa-credit-card"></i>
+            </div>
+            <h3>Delivery & Pricing</h3>
+        </div>
+        <label><small>FREE DELIVERY THRESHOLD (EGP)</small></label>
+        <input type="number" [(ngModel)]="settings.deliveryThreshold" placeholder="Threshold">
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="icon-circle">
+                <i class="fas fa-bell"></i>
+            </div>
+            <h3>Notifications</h3>
+        </div>
+
+        <div class="toggle-row">
+            <div class="text-content">
+                <p class="title">Low stock alerts</p>
+                <p class="subtitle">Alert when product stock drops below 10 units</p>
+            </div>
+            <label class="switch">
+            <input type="checkbox" id="switch1" [(ngModel)]="settings.lowStockAlert">
+            <span class="slider"></span>
+            </label>
+        </div>
+
+         <div class="toggle-row">
+            <div class="text-content">
+                <p class="title">New order alerts</p>
+                <p class="subtitle">Notify when a new order is placed</p>
+            </div>
+            <label class="switch">
+            <input type="checkbox" id="switch2" [(ngModel)]="settings.newOrderAlerts">
+            <span class="slider"></span>
+            </label>
+        </div>
+
+         <div class="toggle-row">
+            <div class="text-content">
+                <p class="title">Return requests</p>
+                <p class="subtitle">Alert when a customer requests a return</p>
+            </div>
+            <label class="switch">
+            <input type="checkbox" id="switch3" [(ngModel)]="settings.returnRequests">
+            <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="icon-circle">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h3>Security</h3>
+        </div>
+        <input type="text" placeholder="Change Password">
+        
+     </div>
+
+    <button class="save-btn" (click)="saveChanges()">Save Changes</button>
+
+
+
+</div>

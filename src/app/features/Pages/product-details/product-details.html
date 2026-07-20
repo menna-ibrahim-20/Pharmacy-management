@@ -1,0 +1,475 @@
+<app-navbar></app-navbar>
+<app-cart></app-cart>
+<div class="pd-page">
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="pd-loading">
+    <div class="pd-spinner"></div>
+    <p>Loading product...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !loading" class="pd-error">
+    <p>{{ error }}</p>
+    <a routerLink="/home">← Back to Products</a>
+  </div>
+
+  <ng-container *ngIf="product && !loading">
+
+    <!-- Breadcrumb -->
+    <nav class="pd-breadcrumb">
+      <a routerLink="/home">Home</a>
+      <span class="sep">›</span>
+      <span>{{ product.category }}</span>
+      <span class="sep">›</span>
+      <span>{{ product.name }}</span>
+    </nav>
+
+    <!-- Main -->
+    <div class="pd-main">
+
+      <!-- Images -->
+      <div class="pd-gallery">
+
+        <div class="pd-main-image">
+          <img
+            [src]="productImages[selectedImageIndex]"
+            [alt]="product.name">
+
+          <span
+            *ngIf="product.badge"
+            class="pd-badge badge-green">
+            {{ product.badge }}
+          </span>
+
+          <span
+            *ngIf="discountPercent>0"
+            class="pd-badge badge-orange"
+            style="right:12px;left:auto">
+            -{{ discountPercent }}%
+          </span>
+
+          <div
+            *ngIf="!productInStock"
+            class="pd-out-of-stock">
+            Out of Stock
+          </div>
+
+        </div>
+
+        <div
+          class="pd-thumbnails"
+          *ngIf="productImages.length>1">
+
+          <button
+            *ngFor="let img of productImages;let i=index"
+            class="pd-thumb"
+            [class.active]="i===selectedImageIndex"
+            (click)="selectImage(i)">
+
+            <img
+              [src]="img"
+              [alt]="product.name">
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Product Info -->
+
+      <div class="pd-info">
+
+        <p class="pd-brand">
+          {{ product.brand }}
+        </p>
+
+        <h1 class="pd-title">
+          {{ product.name }}
+        </h1>
+
+        <p class="pd-short-desc">
+          {{ product.description }}
+        </p>
+
+        <!-- Rating -->
+
+        <div class="pd-rating-row">
+
+          <div class="stars">
+            <span
+              *ngFor="let s of getStarArray(product.rating)"
+              class="star"
+              [class.filled]="s">
+              ★
+            </span>
+          </div>
+
+          <span class="pd-rating-num">
+            {{ product.rating }}
+          </span>
+
+          <span class="pd-reviews-count">
+            ({{ product.reviewsCount }} reviews)
+          </span>
+
+        </div>
+
+        <!-- Price -->
+
+        <div class="pd-price-row">
+
+          <span class="pd-price">
+            EGP {{ product.price }}
+          </span>
+
+          <span
+            *ngIf="originalPrice"
+            class="pd-original-price">
+            EGP {{ originalPrice }}
+          </span>
+
+          <span
+            *ngIf="discountPercent>0"
+            class="pd-discount-tag">
+            Save {{ discountPercent }}%
+          </span>
+
+        </div>
+
+        <!-- Category -->
+
+        <div class="pd-tags">
+          <span class="pd-tag">
+            {{ product.category }}
+          </span>
+        </div>
+
+        <!-- Stock -->
+
+        <p
+          class="pd-stock"
+          [class.low]="productStock<10">
+
+          <span
+            class="stock-dot"
+            [class.in-stock]="productInStock">
+          </span>
+
+          <ng-container *ngIf="productInStock">
+
+            In Stock
+
+          </ng-container>
+
+          <ng-container *ngIf="!productInStock">
+
+            Out Of Stock
+
+          </ng-container>
+
+        </p>
+
+        <!-- Quantity -->
+
+        <div class="pd-actions">
+
+          <div class="pd-qty">
+
+            <button
+              class="qty-btn"
+              (click)="decreaseQty()"
+              [disabled]="quantity<=1">
+
+              −
+
+            </button>
+
+            <span class="qty-val">
+              {{ quantity }}
+            </span>
+
+            <button
+              class="qty-btn"
+              (click)="increaseQty()">
+
+              +
+
+            </button>
+
+          </div>
+
+          <button
+            class="pd-add-btn"
+            [disabled]="!productInStock"
+            (click)="addToCart()">
+
+            + Add To Cart
+
+          </button>
+
+        </div>
+
+        <p class="pd-delivery">
+          🚚 Free delivery on orders over EGP 500
+        </p>
+
+      </div>
+
+    </div>
+
+    <!-- Tabs -->
+
+    <div class="pd-tabs-section">
+
+      <div class="pd-tabs-header">
+
+        <button
+          class="pd-tab"
+          [class.active]="activeTab==='description'"
+          (click)="setTab('description')">
+
+          Description
+
+        </button>
+
+        <button
+          class="pd-tab"
+          [class.active]="activeTab==='reviews'"
+          (click)="setTab('reviews')">
+
+          Reviews
+
+          <span class="tab-count">
+
+            {{ reviews.length }}
+
+          </span>
+
+        </button>
+
+        <button
+          class="pd-tab"
+          [class.active]="activeTab==='shipping'"
+          (click)="setTab('shipping')">
+
+          Shipping & Returns
+
+        </button>
+
+      </div>
+            <!-- Description -->
+      <div class="pd-tab-content" *ngIf="activeTab === 'description'">
+        <p class="pd-long-desc">
+          {{ product.description }}
+        </p>
+      </div>
+
+      <!-- Reviews -->
+      <div class="pd-tab-content" *ngIf="activeTab === 'reviews'">
+
+        <div class="pd-reviews-summary">
+
+          <div class="pd-overall-rating">
+            <span class="big-rating">{{ product.rating }}</span>
+
+            <div class="stars big-stars">
+              <span
+                *ngFor="let s of getStarArray(product.rating)"
+                class="star"
+                [class.filled]="s">
+                ★
+              </span>
+            </div>
+
+            <p class="rating-subtitle">
+              {{ reviews.length }} Reviews
+            </p>
+          </div>
+
+          <div class="pd-rating-bars">
+
+            <div
+              *ngFor="let bar of getRatingBars()"
+              class="rating-bar-row">
+
+              <span class="bar-label">
+                {{ bar.label }} ★
+              </span>
+
+              <div class="bar-track">
+                <div
+                  class="bar-fill"
+                  [style.width.%]="bar.percent">
+                </div>
+              </div>
+
+              <span class="bar-percent">
+                {{ bar.percent }}%
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Static Reviews -->
+
+        <div class="pd-reviews-list">
+
+          <div
+            *ngFor="let review of reviews"
+            class="pd-review-card">
+
+            <div class="review-header">
+
+              <div class="reviewer-avatar">
+                {{ review.name.charAt(0) }}
+              </div>
+
+              <div class="reviewer-info">
+
+                <span class="reviewer-name">
+                  {{ review.name }}
+                </span>
+
+                <span
+                  *ngIf="review.verified"
+                  class="verified-badge">
+                  ✓ Verified
+                </span>
+
+              </div>
+
+              <span class="review-date">
+                {{ review.date }}
+              </span>
+
+            </div>
+
+            <div class="review-stars">
+
+              <span
+                *ngFor="let s of getStarArray(review.rating)"
+                class="star sm"
+                [class.filled]="s">
+                ★
+              </span>
+
+            </div>
+
+            <p class="review-comment">
+              {{ review.comment }}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Shipping -->
+
+      <div
+        class="pd-tab-content"
+        *ngIf="activeTab === 'shipping'">
+
+        <div class="pd-shipping-grid">
+
+          <div class="shipping-card">
+            <div class="shipping-icon">🚚</div>
+            <h3>Shipping</h3>
+            <p>3–5 Business Days</p>
+          </div>
+
+          <div class="shipping-card">
+            <div class="shipping-icon">⚡</div>
+            <h3>Express Delivery</h3>
+            <p>Next Day Delivery Available</p>
+          </div>
+
+          <div class="shipping-card">
+            <div class="shipping-icon">↩️</div>
+            <h3>Returns</h3>
+            <p>30 Day Return Policy</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Related Products -->
+
+    <div
+      class="pd-related"
+      *ngIf="relatedProducts.length">
+
+      <h2 class="pd-related-title">
+        You might also like
+      </h2>
+
+      <div class="pd-related-grid">
+
+        <div
+          *ngFor="let rp of relatedProducts"
+          class="pd-related-card"
+          [routerLink]="['/product-details', rp.id]">
+
+          <div class="related-img-wrap">
+            <img
+              [src]="rp.image"
+              [alt]="rp.name">
+          </div>
+
+          <p class="related-brand">
+            {{ rp.brand }}
+          </p>
+
+          <p class="related-name">
+            {{ rp.name }}
+          </p>
+
+          <div class="related-footer">
+
+            <div class="related-stars">
+
+              <span
+                *ngFor="let s of getStarArray(rp.rating)"
+                class="star sm"
+                [class.filled]="s">
+                ★
+              </span>
+
+              <span class="related-count">
+                ({{ rp.reviewsCount }})
+              </span>
+
+            </div>
+
+            <span class="related-price">
+              EGP {{ rp.price }}
+            </span>
+
+          </div>
+
+          <button
+            class="related-add-btn"
+            (click)="$event.stopPropagation()">
+
+            + Add
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>

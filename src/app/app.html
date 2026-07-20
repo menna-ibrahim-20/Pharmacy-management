@@ -1,0 +1,25 @@
+<router-outlet></router-outlet>
+
+<!-- Global Toast Notification Container -->
+<div class="global-toast-container">
+  <div 
+    *ngFor="let toast of notificationService.toasts()" 
+    class="toast-card" 
+    [class]="toast.type"
+  >
+    <div class="toast-icon-box">
+      <i class="fa-solid" [ngClass]="{
+        'fa-circle-check': toast.type === 'success',
+        'fa-circle-info': toast.type === 'info',
+        'fa-circle-exclamation': toast.type === 'warning',
+        'fa-circle-xmark': toast.type === 'error'
+      }"></i>
+    </div>
+    <div class="toast-message-box">
+      {{ toast.message }}
+    </div>
+    <button class="toast-close-btn" (click)="notificationService.remove(toast.id)" title="Close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<app-navbar></app-navbar>
+<app-cart></app-cart>
+
+<div class="location-page">
+  <div class="location-container">
+    
+    <!-- Left Sidebar: Branch Finder -->
+    <div class="location-sidebar">
+      <div class="sidebar-header-box">
+        <h2>Our Store Location</h2>
+        <p>Visit our store or order online for fast home delivery.</p>
+      </div>
+
+      <div class="branches-list">
+        <div *ngIf="filteredStores.length === 0" class="no-branches">
+          <i class="fa-solid fa-map-pin no-icon"></i>
+          <p>No branches found matching your search.</p>
+        </div>
+
+        <div 
+          *ngFor="let store of filteredStores" 
+          class="branch-card" 
+          [class.active]="selectedStore.id === store.id"
+          (click)="selectStore(store)"
+        >
+          <div class="card-title-row">
+            <h4>{{ store.name }}</h4>
+            <span class="status-badge" [class.open]="isBranchOpen(store.hours)">
+              {{ getBranchStatusText(store.hours) }}
+            </span>
+          </div>
+          <p class="address-text"><i class="fa-solid fa-location-dot"></i> {{ store.address }}</p>
+          <p class="hours-text"><i class="fa-solid fa-clock"></i> {{ store.hours }}</p>
+          <p class="phone-text"><i class="fa-solid fa-phone"></i> {{ store.phone }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Content: Google Map Display -->
+    <div class="map-view-panel">
+      <div class="selected-branch-details" *ngIf="selectedStore">
+        <div class="details-left">
+          <h3>{{ selectedStore.name }}</h3>
+          <p>{{ selectedStore.address }}</p>
+        </div>
+        <a 
+          [href]="selectedStore.directionsUrl" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="directions-btn"
+        >
+          <i class="fa-solid fa-diamond-turn-right"></i> Get Directions
+        </a>
+      </div>
+
+      <div class="map-container">
+        <iframe 
+          [src]="sanitizedMapUrl" 
+          width="100%" 
+          height="100%" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<app-footer></app-footer>
